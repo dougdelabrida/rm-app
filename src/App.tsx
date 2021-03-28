@@ -1,5 +1,12 @@
+import { ApolloProvider } from "@apollo/client";
+import client from "./api/graphql";
+
 function App() {
-  return <div className="App">just a test</div>;
+  return (
+    <ApolloProvider client={client}>
+      <div>just a test</div>;
+    </ApolloProvider>
+  );
 }
 
 export default App;
