@@ -79,4 +79,22 @@ describe("<DataView />", () => {
 
     await waitFor(() => expect(loadMore).toHaveBeenCalledTimes(1));
   });
+
+  test("should render wrapper properly", async () => {
+    const Wrapper = ({ children }: any) => (
+      <span data-testid="wrapper">{children}</span>
+    );
+    const { getByTestId, getByText } = render(
+      <DataView
+        data={data}
+        limit={6}
+        total={12}
+        wrapper={Wrapper}
+        onLoadMore={() => null}
+        render={(value) => <div>{value.name}</div>}
+      />
+    );
+    expect(getByText("justa test")).toBeInTheDocument();
+    expect(getByTestId("wrapper")).toBeInTheDocument();
+  });
 });
