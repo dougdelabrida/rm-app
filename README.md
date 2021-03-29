@@ -1,6 +1,8 @@
-# Getting Started with Create React App
+# List of characters and their dimension
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple page that renders a list of characters of Rick and Morty.
+
+You can follow the instruction above to run it locally or just access it [https://pickle-app.surge.sh/](https://pickle-app.surge.sh/)
 
 ## Available Scripts
 
