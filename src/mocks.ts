@@ -12,7 +12,6 @@ export const charactersMock = [
       data: {
         characters: {
           info: {
-            __typename: "Info",
             count: 671,
           },
           results: [
@@ -20,25 +19,27 @@ export const charactersMock = [
               id: "1",
               name: "Rick Sanchez",
               image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-              __typename: "Character",
-              status: "Alive",
+              location: {
+                dimension: "Replacement Dimension",
+              },
             },
             {
               id: "2",
               name: "Morty Smith",
               image: "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
-              __typename: "Character",
-              status: "Alive",
+              location: {
+                dimension: "Replacement Dimension",
+              },
             },
             {
               id: "3",
               name: "Summer Smith",
               image: "https://rickandmortyapi.com/api/character/avatar/3.jpeg",
-              __typename: "Character",
-              status: "Alive",
+              location: {
+                dimension: "Replacement Dimension",
+              },
             },
           ],
-          __typename: "Characters",
         },
       },
     },

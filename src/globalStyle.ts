@@ -29,6 +29,7 @@ export default createGlobalStyle`
   }
   body {
     font-family: 'Roboto', sans-serif;
+    background-color: #e8edef;
     line-height: 1;
   }
   ol, ul {

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 import { getPagesFrom } from "../utils";
 import Button from "./Button";
 
@@ -13,6 +14,12 @@ export type DataViewProps<T extends ItemView> = {
   onLoadMore: () => void;
   render: (value: T) => JSX.Element;
 };
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+`;
 
 export function DataView<T extends ItemView>({
   data,
@@ -52,7 +59,9 @@ export function DataView<T extends ItemView>({
       {items.map((item) => (
         <div key={item.id}>{render(item)}</div>
       ))}
-      {hasMoreItems && <Button onClick={loadNextPage}>Load more</Button>}
+      <Footer>
+        {hasMoreItems && <Button onClick={loadNextPage}>Load more</Button>}
+      </Footer>
     </div>
   );
 }

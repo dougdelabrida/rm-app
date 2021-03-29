@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import { DataView } from "../components/DataView";
 import { Loading } from "../components/Loading";
 import { Character } from "../types/character";
@@ -15,11 +16,40 @@ export const GET_CHARACTERS = gql`
         id
         name
         image
-        status
+        location {
+          dimension
+        }
       }
     }
   }
 `;
+
+const CharacterWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 16px 0;
+`;
+
+const Photo = styled.img`
+  border: 8px solid #000;
+  border-radius: 18px;
+  width: 240px;
+`;
+
+const Title = styled.h2`
+  font-weight: bold;
+  font-size: 24px;
+  padding: 8px 0px;
+`;
+
+const renderCharacter = ({ image, name, location }: Character) => (
+  <CharacterWrapper>
+    <Photo src={image} alt={name} />
+    <Title>{name}</Title>
+    {location.dimension && <div>From: {location.dimension}</div>}
+  </CharacterWrapper>
+);
 
 export const CharacterList = () => {
   const [page, setPage] = useState(1);
@@ -62,13 +92,7 @@ export const CharacterList = () => {
           limit={10}
           onLoadMore={handleNextPage}
           total={total}
-          render={({ image, name, status }) => (
-            <>
-              <img src={image} alt={name} />
-              <div>{name}</div>
-              <div>{status}</div>
-            </>
-          )}
+          render={renderCharacter}
         />
       )}
     </div>
