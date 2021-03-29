@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getPagesFrom } from "../utils";
+import Button from "./Button";
 
 export type ItemView = {
   id: string;
@@ -51,7 +52,7 @@ export function DataView<T extends ItemView>({
       {items.map((item) => (
         <div key={item.id}>{render(item)}</div>
       ))}
-      {hasMoreItems && <button onClick={loadNextPage}>Load more</button>}
+      {hasMoreItems && <Button onClick={loadNextPage}>Load more</Button>}
     </div>
   );
 }
