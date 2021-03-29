@@ -11,6 +11,7 @@ export type DataViewProps<T extends ItemView> = {
   data: T[];
   limit: number;
   total: number;
+  wrapper?: React.FunctionComponent;
   onLoadMore: () => void;
   render: (value: T) => JSX.Element;
 };
@@ -25,6 +26,7 @@ export function DataView<T extends ItemView>({
   data,
   limit,
   total,
+  wrapper: Wrapper,
   onLoadMore,
   render,
 }: DataViewProps<T>) {
@@ -54,14 +56,21 @@ export function DataView<T extends ItemView>({
     }
   };
 
-  return (
-    <div>
+  const content = (
+    <>
       {items.map((item) => (
         <div key={item.id}>{render(item)}</div>
       ))}
       <Footer>
         {hasMoreItems && <Button onClick={loadNextPage}>Load more</Button>}
       </Footer>
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      {Wrapper && <Wrapper>{content}</Wrapper>}
+      {!Wrapper && content}
+    </>
   );
 }
