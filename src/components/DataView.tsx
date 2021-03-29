@@ -61,9 +61,6 @@ export function DataView<T extends ItemView>({
       {items.map((item) => (
         <div key={item.id}>{render(item)}</div>
       ))}
-      <Footer>
-        {hasMoreItems && <Button onClick={loadNextPage}>Load more</Button>}
-      </Footer>
     </>
   );
 
@@ -71,6 +68,9 @@ export function DataView<T extends ItemView>({
     <>
       {Wrapper && <Wrapper>{content}</Wrapper>}
       {!Wrapper && content}
+      <Footer>
+        {hasMoreItems && <Button onClick={loadNextPage}>Load more</Button>}
+      </Footer>
     </>
   );
 }
