@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { DataView, ItemView } from "../DataView";
 
@@ -60,5 +60,23 @@ describe("<DataView />", () => {
     userEvent.click(loadMoreEl);
     const text = await findByText("justa test2");
     expect(text).toBeInTheDocument();
+  });
+
+  test("should load more outside when clicking on load more and", async () => {
+    const loadMore = jest.fn();
+    const { getByText } = render(
+      <DataView
+        data={data}
+        limit={6}
+        total={12}
+        onLoadMore={loadMore}
+        render={(value) => <div>{value.name}</div>}
+      />
+    );
+
+    const loadMoreEl = getByText(/load more/i);
+    userEvent.click(loadMoreEl);
+
+    await waitFor(() => expect(loadMore).toHaveBeenCalledTimes(1));
   });
 });
