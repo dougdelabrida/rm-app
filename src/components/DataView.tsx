@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getPagesFrom } from "../utils";
 
 export type ItemView = {
@@ -17,24 +17,33 @@ export function DataView<T extends ItemView>({
   data,
   limit,
   total,
+  onLoadMore,
   render,
 }: DataViewProps<T>) {
-  const [page, setPage] = useState(0);
-  const [pages, setPages] = useState<T[][]>([[]]);
-  const [items, setItems] = useState<T[]>(pages[page]);
+  const waitingForMore = useRef(false);
+  const page = useRef(0);
+  const pages = useRef<T[][]>(getPagesFrom(data, limit));
+  const [items, setItems] = useState<T[]>(pages.current[page.current]);
 
-  const hasMore = total > data.length || pages.length - 1 > page;
+  const shouldLoadOutside = total > items.length;
+  const shouldLoadInside = pages.current.length - 1 > page.current;
+  const hasMoreItems = shouldLoadOutside || shouldLoadInside;
 
   useEffect(() => {
-    setPages(getPagesFrom(data, limit));
+    if (waitingForMore.current) {
+      pages.current = getPagesFrom(data, limit);
+      setItems((items) => [...items, ...pages.current[page.current]]);
+    }
   }, [data, limit]);
 
-  useEffect(() => {
-    setItems((items) => [...items, ...pages[page]]);
-  }, [page, pages]);
-
   const loadNextPage = () => {
-    setPage((page) => page + 1);
+    page.current = page.current + 1;
+    if (!shouldLoadInside && shouldLoadOutside) {
+      onLoadMore();
+      waitingForMore.current = true;
+    } else {
+      setItems((items) => [...items, ...pages.current[page.current]]);
+    }
   };
 
   return (
@@ -42,7 +51,7 @@ export function DataView<T extends ItemView>({
       {items.map((item) => (
         <div key={item.id}>{render(item)}</div>
       ))}
-      {hasMore && <button onClick={loadNextPage}>Load more</button>}
+      {hasMoreItems && <button onClick={loadNextPage}>Load more</button>}
     </div>
   );
 }
