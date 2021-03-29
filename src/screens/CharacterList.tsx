@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { DataView } from "../components/DataView";
 import { Loading } from "../components/Loading";
 import { Character } from "../types/character";
+import media from "../utils/media";
 
 export const GET_CHARACTERS = gql`
   query Character($page: Int!) {
@@ -51,6 +52,16 @@ const renderCharacter = ({ image, name, location }: Character) => (
   </CharacterWrapper>
 );
 
+const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  ${media.desktop`
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    /* grid-gap: 36px; */
+  `}
+`;
+
 export const CharacterList = () => {
   const [page, setPage] = useState(1);
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -88,8 +99,9 @@ export const CharacterList = () => {
 
       {characters.length > 0 && (
         <DataView
+          wrapper={ListWrapper}
           data={characters}
-          limit={10}
+          limit={9}
           onLoadMore={handleNextPage}
           total={total}
           render={renderCharacter}
