@@ -1,35 +1,75 @@
 import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
+import { useEffect, useState } from "react";
+import { DataView } from "../components/DataView";
 import { Character } from "../types/character";
 
 export const GET_CHARACTERS = gql`
   query Character($page: Int!) {
     characters(page: $page) {
+      info {
+        count
+      }
       results {
         id
         name
+        image
+        status
       }
     }
   }
 `;
 
 export const CharacterList = () => {
-  const { loading, error, data } = useQuery(GET_CHARACTERS, {
+  const [page, setPage] = useState(1);
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const { loading, error, data, fetchMore } = useQuery(GET_CHARACTERS, {
     variables: {
-      page: 0,
+      page,
     },
   });
 
-  if (error) return <span>error screen</span>;
-  if (loading) return <span>loading screen</span>;
+  const handleNextPage = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchMore({
+      variables: {
+        page: nextPage,
+      },
+    });
+  };
 
-  const characters: Character[] = data?.characters?.results || [];
+  useEffect(() => {
+    if (data?.characters?.results) {
+      setCharacters((characters) => [
+        ...characters,
+        ...data?.characters?.results,
+      ]);
+    }
+  }, [data?.characters?.results]);
+
+  const total = data?.characters?.info.count;
 
   return (
     <div>
-      {characters.map(({ id, name }) => (
-        <div key={id}>{name}</div>
-      ))}
+      {error && <span>error screen</span>}
+      {loading && <span>loading</span>}
+
+      {characters.length > 0 && (
+        <DataView
+          data={characters}
+          limit={10}
+          onLoadMore={handleNextPage}
+          total={total}
+          render={({ image, name, status }) => (
+            <>
+              <img src={image} alt={name} />
+              <div>{name}</div>
+              <div>{status}</div>
+            </>
+          )}
+        />
+      )}
     </div>
   );
 };
