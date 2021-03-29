@@ -1,4 +1,5 @@
 import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { DataView, ItemView } from "../DataView";
 
 const data: ({ name: string } & ItemView)[] = [
@@ -42,5 +43,22 @@ describe("<DataView />", () => {
 
     const loadMoreEl = getByText(/load more/i);
     expect(loadMoreEl).toBeInTheDocument();
+  });
+
+  test("should load more items when clicking on load more", async () => {
+    const { getByText, findByText } = render(
+      <DataView
+        data={data}
+        limit={2}
+        total={data.length}
+        onLoadMore={() => null}
+        render={(value) => <div>{value.name}</div>}
+      />
+    );
+
+    const loadMoreEl = getByText(/load more/i);
+    userEvent.click(loadMoreEl);
+    const text = await findByText("justa test2");
+    expect(text).toBeInTheDocument();
   });
 });
