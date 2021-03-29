@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { useEffect, useState } from "react";
 import { DataView } from "../components/DataView";
+import { Loading } from "../components/Loading";
 import { Character } from "../types/character";
 
 export const GET_CHARACTERS = gql`
@@ -53,7 +54,7 @@ export const CharacterList = () => {
   return (
     <div>
       {error && <span>error screen</span>}
-      {loading && <span>loading</span>}
+      {loading && characters.length === 0 && <Loading />}
 
       {characters.length > 0 && (
         <DataView

@@ -15,7 +15,7 @@ describe("<CharacterList />", () => {
       </MockedProvider>
     );
 
-    await waitForElementToBeRemoved(() => screen.getByText(/loading/i));
+    await waitForElementToBeRemoved(() => screen.getByTestId("loading"));
 
     const rick = await screen.findByText("Rick Sanchez");
     const morty = await screen.findByText("Morty Smith");
